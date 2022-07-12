@@ -28,6 +28,7 @@ class App{
         //const geometry = new THREE.CircleGeometry(1, 32, 0, Math.PI);
         //const geometry = this.createStarGeometry();
         const geometry = this.createPolygonGeometry();
+        console.log(geometry)
         const material = new THREE.MeshStandardMaterial( { color: 0xFF0000 });
 
         this.mesh = new THREE.Mesh( geometry, material );
@@ -57,9 +58,13 @@ class App{
         }
         
         const extrudeSettings = {
-	        steps: 1,
-	        depth: 1,
-            bevelEnabled: false
+            steps: 2,
+            depth: 16,
+            bevelEnabled: true,
+            bevelThickness: 1,
+            bevelSize: 1,
+            bevelOffset: 0,
+            bevelSegments: 1
         };
 
         return new THREE.ExtrudeGeometry( shape, extrudeSettings );
@@ -72,17 +77,22 @@ class App{
         const inc = PI2/sides;
         
         shape.moveTo( radius, 0 );
-        let inner = true;
         
         for( let theta=inc; theta<PI2; theta += inc){
             shape.lineTo( Math.cos(theta)*radius, Math.sin(theta)*radius);
         }
         
         const extrudeSettings = {
-	        steps: 1,
-	        depth: radius * 0.25,
-            bevelEnabled: false
+            steps: 2,
+            depth: 1,
+            bevelEnabled: true,
+            bevelThickness: 5,
+            bevelSize: 1,
+            bevelOffset: 0,
+            bevelSegments: 20
         };
+
+console.log(shape)
 
         return new THREE.ExtrudeGeometry( shape, extrudeSettings );
     }

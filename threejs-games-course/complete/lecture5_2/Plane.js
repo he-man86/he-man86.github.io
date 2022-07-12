@@ -60,9 +60,9 @@ class Plane{
 
         if (this.game.active){
             if (!this.game.spaceKey){
-                this.velocity.y -= 0.001;
+                this.velocity.y -= 0.1;
             }else{
-                this.velocity.y += 0.001;
+                this.velocity.y += 0.1;
             }
             this.velocity.z += 0.0001;
             this.plane.rotation.set(0, 0, Math.sin(time*3)*0.2, 'XYZ');
