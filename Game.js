@@ -205,8 +205,6 @@ class Game{
         const time = this.clock.getElapsedTime();
 
         this.controller.update(time);
-        console.log(this.Joystick1Pos);
-        console.log(this.Joystick2Pos);
         this.plane.update(time);
 
         if (this.active){

@@ -68,14 +68,17 @@ class Plane{
 
         if (this.game.active){
 
-            //this.velocity.y = this.Joystick1Pos.up *0.3;
-            //this.velocity.z = this.Joystick1Pos.right *0.3;
-
             this.plane.rotation.set(this.Joystick1Pos.up*(Math.PI/2), 0, -this.Joystick2Pos.right*(Math.PI/2), 'XYZ');
+            
+            this.velocity.z = 1;
+            this.velocity.x = this.Joystick1Pos.up*(Math.PI/2),
+            this.velocity.y = this.Joystick2Pos.right*(Math.PI/2),
+            console.log(this.velocity)
 
-            //this.plane.translateZ( this.velocity.z );
-            //this.plane.translateY( this.velocity.y );
-
+            this.plane.translateZ( this.velocity.z );
+            this.plane.translateY( this.velocity.y );
+            this.plane.translateX( this.velocity.x );
+            
             
         }else{
             this.plane.rotation.set(0, 0, Math.sin(time*3)*0.2, 'XYZ');
