@@ -7,7 +7,7 @@ class Controller{
         this.camera = game.camera;
         this.clock = game.clock;
         this.user = game.user;
-        this.target = game.user.root;
+        this.target ;//= game.user.root;
         this.navmesh = game.navmesh;
         this.game = game;
 

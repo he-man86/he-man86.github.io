@@ -3,7 +3,8 @@ import { RGBELoader } from '../../libs/three137/RGBELoader.js';
 import { LoadingBar } from '../../libs/LoadingBar.js';
 import { Plane } from './Plane.js';
 import { Obstacles } from './Obstacles.js';
-import { SFX } from '../../libs/SFX.js';
+import { Controller } from './Controller.js';
+//import { SFX } from '../../libs/SFX.js';
 
 class Game{
 	constructor(){
@@ -18,7 +19,7 @@ class Game{
 		this.assetsPath = '../../assets/';
         
 		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 100 );
-        this.camera.position.set( 0, 0, -5 );
+        this.camera.position.set( 0, 3, -10);
         this.camera.lookAt(0, 0, 6);
 
         this.cameraController = new THREE.Object3D();
@@ -43,16 +44,6 @@ class Game{
         this.load();
 
         window.addEventListener('resize', this.resize.bind(this) );
-
-        document.addEventListener('keydown', this.keyDown.bind(this));
-        document.addEventListener('keyup', this.keyUp.bind(this));
-
-        document.addEventListener('touchstart', this.mouseDown.bind(this) );
-        document.addEventListener('touchend', this.mouseUp.bind(this) );
-        document.addEventListener('mousedown', this.mouseDown.bind(this) );
-        document.addEventListener('mouseup', this.mouseUp.bind(this) );
-        
-        this.spaceKey = false;
 
         const btn = document.getElementById('playBtn');
         btn.addEventListener('click', this.startGame.bind(this));
@@ -82,37 +73,13 @@ class Game{
 
         this.active = true;
 
-        this.sfx.play('engine');
+        //this.sfx.play('engine');
     }
 
     resize(){
         this.camera.aspect = window.innerWidth / window.innerHeight;
     	this.camera.updateProjectionMatrix();
     	this.renderer.setSize( window.innerWidth, window.innerHeight ); 
-    }
-
-    keyDown(evt){
-        switch(evt.keyCode){
-            case 32:
-                this.spaceKey = true; 
-                break;
-        }
-    }
-    
-    keyUp(evt){
-        switch(evt.keyCode){
-            case 32:
-                this.spaceKey = false;
-                break;
-        }
-    }
-
-    mouseDown(evt){
-        this.spaceKey = true;
-    }
-
-    mouseUp(evt){
-        this.spaceKey = false;
     }
 
     setEnvironment(){
@@ -140,8 +107,9 @@ class Game{
 
         this.plane = new Plane(this);
         this.obstacles = new Obstacles(this);
+        this.controller = new Controller(this);
 
-        this.loadSFX();
+        //this.loadSFX();
     }
 
     loadSFX(){
@@ -232,6 +200,7 @@ class Game{
         const dt = this.clock.getDelta();
         const time = this.clock.getElapsedTime();
 
+        this.controller.update(time);
         this.plane.update(time);
 
         if (this.active){
