@@ -35,7 +35,7 @@ class Plane{
 
 				this.scene.add( gltf.scene );
                 this.plane = gltf.scene;
-                this.velocity = new Vector3(0,0,0.1);
+                this.velocity = new Vector3(0,0,0.5);
                 
                 this.propeller = this.plane.getObjectByName("propeller");
 
@@ -70,14 +70,16 @@ class Plane{
 
             this.plane.rotation.set(this.Joystick1Pos.up*(Math.PI/2), 0, -this.Joystick2Pos.right*(Math.PI/2), 'XYZ');
             
-            this.velocity.z = 1;
-            this.velocity.x = this.Joystick1Pos.up*(Math.PI/2),
-            this.velocity.y = this.Joystick2Pos.right*(Math.PI/2),
-            console.log(this.velocity)
+            this.velocity.z = 0.1;
+            this.velocity.x = this.Joystick1Pos.up
+            this.velocity.y = this.Joystick2Pos.right
+            console.log(this.plane.position)
+
+            //this.plane.translateOnAxis(this.velocity,1);
 
             this.plane.translateZ( this.velocity.z );
-            this.plane.translateY( this.velocity.y );
-            this.plane.translateX( this.velocity.x );
+         //   this.plane.translateY( this.velocity.y );
+          //  this.plane.translateX( this.velocity.x );
             
             
         }else{
