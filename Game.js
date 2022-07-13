@@ -41,12 +41,16 @@ class Game{
         this.setEnvironment();
         
         this.active = false;
+        this.Joystick1Pos = { up:0, right:0 };
+        this.Joystick2Pos = { up:0, right:0 };
         this.load();
 
         window.addEventListener('resize', this.resize.bind(this) );
 
         const btn = document.getElementById('playBtn');
         btn.addEventListener('click', this.startGame.bind(this));
+
+
 	}
 	
     startGame(){
@@ -201,6 +205,8 @@ class Game{
         const time = this.clock.getElapsedTime();
 
         this.controller.update(time);
+        console.log(this.Joystick1Pos);
+        console.log(this.Joystick2Pos);
         this.plane.update(time);
 
         if (this.active){

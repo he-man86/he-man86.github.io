@@ -7,6 +7,8 @@ class Plane{
         this.loadingBar = game.loadingBar;
         this.game = game;
         this.scene = game.scene;
+        this.Joystick1Pos = this.game.Joystick1Pos;
+        this.Joystick2Pos = this.game.Joystick2Pos;
         this.load();
         this.tmpPos = new Vector3();
     }
@@ -65,15 +67,16 @@ class Plane{
         if (this.propeller !== undefined) this.propeller.rotateZ(1);
 
         if (this.game.active){
-            if (!this.game.spaceKey){
-                this.velocity.y -= 0.001;
-            }else{
-                this.velocity.y += 0.001;
-            }
-            this.velocity.z += 0.0001;
-            this.plane.rotation.set(0, 0, Math.sin(time*3)*0.2, 'XYZ');
-            this.plane.translateZ( this.velocity.z );
-            this.plane.translateY( this.velocity.y );
+
+            //this.velocity.y = this.Joystick1Pos.up *0.3;
+            //this.velocity.z = this.Joystick1Pos.right *0.3;
+
+            this.plane.rotation.set(this.Joystick1Pos.up*(Math.PI/2), 0, -this.Joystick2Pos.right*(Math.PI/2), 'XYZ');
+
+            //this.plane.translateZ( this.velocity.z );
+            //this.plane.translateY( this.velocity.y );
+
+            
         }else{
             this.plane.rotation.set(0, 0, Math.sin(time*3)*0.2, 'XYZ');
             this.plane.position.y = Math.cos(time) * 1.5;
