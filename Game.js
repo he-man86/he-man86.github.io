@@ -18,7 +18,7 @@ class Game{
 		this.assetsPath = '../../assets/';
         
 		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 100 );
-        this.camera.position.set( -4.37, 0, -4.75 );
+        this.camera.position.set( 0, 0, -5 );
         this.camera.lookAt(0, 0, 6);
 
         this.cameraController = new THREE.Object3D();
