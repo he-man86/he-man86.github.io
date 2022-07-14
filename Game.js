@@ -73,7 +73,7 @@ class Game{
         elm.innerHTML = this.lives;
 
         this.plane.reset();
-        this.obstacles.reset();
+        //this.obstacles.reset();
 
         this.active = true;
 
@@ -110,7 +110,7 @@ class Game{
         this.loadingBar.visible = true;
 
         this.plane = new Plane(this);
-        this.obstacles = new Obstacles(this);
+        //this.obstacles = new Obstacles(this);
         this.controller = new Controller(this);
 
         //this.loadSFX();
@@ -193,7 +193,7 @@ class Game{
 
 	render() {
         if (this.loading){
-            if (this.plane.ready && this.obstacles.ready){
+            if (this.plane.ready){// && this.obstacles.ready){
                 this.loading = false;
                 this.loadingBar.visible = false;
             }else{
@@ -207,9 +207,9 @@ class Game{
         this.controller.update(time);
         this.plane.update(time);
 
-        if (this.active){
-            this.obstacles.update(this.plane.position, dt);
-        }
+        //if (this.active){
+        //    this.obstacles.update(this.plane.position, dt);
+        //}
     
         this.updateCamera();
     

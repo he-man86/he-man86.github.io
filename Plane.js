@@ -75,11 +75,7 @@ class Plane{
             this.velocity.y = this.Joystick2Pos.right
             console.log(this.plane.position)
 
-            //this.plane.translateOnAxis(this.velocity,1);
-
             this.plane.translateZ( this.velocity.z );
-         //   this.plane.translateY( this.velocity.y );
-          //  this.plane.translateX( this.velocity.x );
             
             
         }else{
