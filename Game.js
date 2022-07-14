@@ -59,7 +59,6 @@ class Game{
         const btn = document.getElementById('playBtn');
 
         gameover.style.display = 'none';
-        instructions.style.display = 'none';
         btn.style.display = 'none';
 
         this.score = 0;
