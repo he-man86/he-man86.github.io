@@ -24,9 +24,21 @@ class JoyStick{
 		if (this.domElement!=undefined){
 			const joystick = this;
 			if ('ontouchstart' in window){
-				this.domElement.addEventListener('touchstart', function(evt){ evt.preventDefault(); joystick.tap(evt); });
+				this.domElement.addEventListener('touchstart', 
+					function(evt){ 
+						evt.preventDefault(); 
+						joystick.tap(evt); }, 
+						{
+							passive: false 
+						});
 			}else{
-				this.domElement.addEventListener('mousedown', function(evt){ evt.preventDefault(); joystick.tap(evt); });
+				this.domElement.addEventListener('mousedown', 
+					function(evt){ 
+						evt.preventDefault(); 
+						joystick.tap(evt); }, 
+						{ 
+							passive: false 
+						});
 			}
 		}
 	}
@@ -42,19 +54,29 @@ class JoyStick{
 		let clientY = evt.targetTouches ? evt.targetTouches[0].pageY : evt.clientY;
 		return { x:clientX, y:clientY };
 	}
-	
+
 	tap(evt){
 		evt = evt || window.event;
+		console.log(evt)
 		// get the mouse cursor position at startup:
 		this.offset = this.getMousePosition(evt);
 		const joystick = this;
 		if ('ontouchstart' in window){
-			document.ontouchmove = function(evt){ 
-				//evt.preventDefault(); 
-				joystick.move(evt); };
-			document.ontouchend =  function(evt){ 
-				//evt.preventDefault(); 
-				joystick.up(evt); };
+
+			this.domElement.addEventListener('touchmove', 
+			function(evt){ 
+				evt.preventDefault(); 
+				joystick.move(evt); }, 
+				{
+					passive: false 
+				});		
+			this.domElement.addEventListener('ontouchend', 
+			function(evt){ 
+				evt.preventDefault(); 
+				joystick.up(evt); }, 
+				{
+					passive: false 
+				});				
 		}else{
 			document.onmousemove = function(evt){ evt.preventDefault(); joystick.move(evt); };
 			document.onmouseup = function(evt){ evt.preventDefault(); joystick.up(evt); };
@@ -63,6 +85,7 @@ class JoyStick{
 	
 	move(evt){
 		evt = evt || window.event;
+		console.log(evt)
 		const mouse = this.getMousePosition(evt);
 		// calculate the new cursor position:
 		let left = mouse.x - this.offset.x;
@@ -93,7 +116,7 @@ class JoyStick{
 			document.ontouchmove = null;
 			document.touchend = null;
 		}else{
-			document.onmousemove = null;
+			document.onmousemove = null;	
 			document.onmouseup = null;
 		}
 		this.domElement.style.top = `${this.origin.top}px`;
