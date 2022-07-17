@@ -8,9 +8,6 @@ class Controller{
         this.game = game;
         this.tmpVec3 = new Vector3();
 
-        this.Joystick1Pos = this.game.Joystick1Pos;
-        this.Joystick2Pos = this.game.Joystick2Pos;
-
         if('ontouchstart' in document.documentElement){
 
             const options1 = {
@@ -33,18 +30,17 @@ class Controller{
     }
 
     onMoveJoystick1( up, right ){
-        this.Joystick1Pos.up = up;
-        this.Joystick1Pos.right = -right;
+        this.game.Joystick1Pos.up = up;
     }
 
     onMoveJoystick2( up, right ){
-        this.Joystick2Pos.up = up; 
-        this.Joystick2Pos.right = -right;
+        this.game.Joystick2Pos.right = -right;
     }
 
     update(time){   
         
     }
+
 }
 
 export { Controller };

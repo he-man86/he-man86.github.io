@@ -41,8 +41,8 @@ class Game{
         this.setEnvironment();
         
         this.active = false;
-        this.Joystick1Pos = { up:0, right:0 };
-        this.Joystick2Pos = { up:0, right:0 };
+        this.Joystick1Pos = { up:0 };
+        this.Joystick2Pos = { right:0 };
         this.load();
 
         window.addEventListener('resize', this.resize.bind(this) );
