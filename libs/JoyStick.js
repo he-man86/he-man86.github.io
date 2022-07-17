@@ -49,8 +49,12 @@ class JoyStick{
 		this.offset = this.getMousePosition(evt);
 		const joystick = this;
 		if ('ontouchstart' in window){
-			document.ontouchmove = function(evt){ evt.preventDefault(); joystick.move(evt); };
-			document.ontouchend =  function(evt){ evt.preventDefault(); joystick.up(evt); };
+			document.ontouchmove = function(evt){ 
+				//evt.preventDefault(); 
+				joystick.move(evt); };
+			document.ontouchend =  function(evt){ 
+				//evt.preventDefault(); 
+				joystick.up(evt); };
 		}else{
 			document.onmousemove = function(evt){ evt.preventDefault(); joystick.move(evt); };
 			document.onmouseup = function(evt){ evt.preventDefault(); joystick.up(evt); };
