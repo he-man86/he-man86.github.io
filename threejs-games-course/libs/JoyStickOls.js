@@ -1,4 +1,4 @@
-class JoyStick{
+class JoyStickNew{
 	constructor(options){
 		const circle = document.createElement("div");
 		if (options.left!==undefined){
@@ -99,4 +99,4 @@ class JoyStick{
 	}
 }
 
-export { JoyStick };
+export { JoyStickNew };

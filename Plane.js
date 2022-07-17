@@ -73,7 +73,7 @@ class Plane{
             this.velocity.z = 0.1;
             this.velocity.x = this.Joystick1Pos.up
             this.velocity.y = this.Joystick2Pos.right
-            console.log(this.plane.position)
+          //  console.log(this.plane.position)
 
             this.plane.translateZ( this.velocity.z );
             
