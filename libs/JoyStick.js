@@ -2,9 +2,9 @@ class JoyStick{
 	constructor(options){
 		const circle = document.createElement("div");
 		if (options.left!==undefined){
-			circle.style.cssText = "position:absolute; bottom:35px; width:80px; height:80px; background:rgba(126, 126, 126, 0.5); border:#444 solid medium; border-radius:0%; left:20px;";
+			circle.style.cssText = "position:absolute; bottom:35px; width:80px; height:80px; background:rgba(126, 126, 126, 0.5); border:#444 solid medium; border-radius:10%; left:20px;";
 		}else if (options.right!==undefined){
-			circle.style.cssText = "position:absolute; bottom:35px; width:80px; height:80px; background:rgba(126, 126, 126, 0.5); border:#444 solid medium; border-radius:0%; right:20px;";
+			circle.style.cssText = "position:absolute; bottom:35px; width:80px; height:80px; background:rgba(126, 126, 126, 0.5); border:#444 solid medium; border-radius:10%; right:20px;";
 		}else{
 			circle.style.cssText = "position:absolute; bottom:35px; width:80px; height:80px; background:rgba(126, 126, 126, 0.5); border:#444 solid medium; border-radius:0%; left:50%; transform:translateX(-50%);";
 		}
@@ -57,7 +57,7 @@ class JoyStick{
 
 	tap(evt){
 		evt = evt || window.event;
-		console.log(evt)
+
 		// get the mouse cursor position at startup:
 		this.offset = this.getMousePosition(evt);
 		const joystick = this;
@@ -85,7 +85,7 @@ class JoyStick{
 	
 	move(evt){
 		evt = evt || window.event;
-		console.log(evt)
+		
 		const mouse = this.getMousePosition(evt);
 		// calculate the new cursor position:
 		let left = mouse.x - this.offset.x;
