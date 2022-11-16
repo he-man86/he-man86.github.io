@@ -4,6 +4,7 @@ import { LoadingBar } from '../../libs/LoadingBar.js';
 import { Plane } from './Plane.js';
 import { Obstacles } from './Obstacles.js';
 import { Controller } from './Controller.js';
+import { ThirdPersonCamera } from './ThirdPersonCamera.js';
 //import { SFX } from '../../libs/SFX.js';
 
 class Game{
@@ -18,16 +19,15 @@ class Game{
 
 		this.assetsPath = '../../assets/';
         
-		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 100 );
-        this.camera.position.set( 0, 3, -10);
-        this.camera.lookAt(0, 0, 6);
+        const fov = 60;
+        const aspect = 1920 / 1080;
+        const near = 1.0;
+        const far = 1000.0;
+        this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+        this.camera.position.set(25, 10, 25);
 
-        this.cameraController = new THREE.Object3D();
-        this.cameraController.add(this.camera);
-        this.cameraTarget = new THREE.Vector3(0,0,6);
-        
 		this.scene = new THREE.Scene();
-        this.scene.add(this.cameraController);
+      //  this.scene.add(this.camera);
 
 		const ambient = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
         ambient.position.set( 0.5, 1, 0.25 );
@@ -111,6 +111,13 @@ class Game{
         this.plane = new Plane(this);
         this.obstacles = new Obstacles(this);
         this.controller = new Controller(this);
+        //console.log(this.plane.position)
+        //console.log(this.plane.rotation)
+        this.thirdPersonCamera = new ThirdPersonCamera({
+            camera: this.camera,
+            rotation: this.plane.rotation,
+            position:this.plane.position,
+          });
 
         //this.loadSFX();
     }
@@ -182,14 +189,6 @@ class Game{
         this.sfx.play('explosion');
     }
 
-    updateCamera(){
-        this.cameraController.position.copy( this.plane.position );
-        this.cameraController.position.y = 0;
-        this.cameraTarget.copy(this.plane.position);
-        this.cameraTarget.z += 6;
-        this.camera.lookAt( this.cameraTarget );
-    }
-
 	render() {
         if (this.loading){
             if (this.plane.ready && this.obstacles.ready){
@@ -206,11 +205,14 @@ class Game{
         this.controller.update(time);
         this.plane.update(time);
 
+       this.plane.rotation;
+       this.plane.position;
         if (this.active){
             this.obstacles.update(this.plane.position, dt);
         }
     
-        this.updateCamera();
+       // console.log(this.thirdPersonCamera._rotation);
+        this.thirdPersonCamera.Update(time);
     
         this.renderer.render( this.scene, this.camera );
 

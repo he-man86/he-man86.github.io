@@ -1,3 +1,4 @@
+import * as THREE from '../../libs/three137/three.module.js';
 import { Group, Vector3 } from '../../libs/three137/three.module.js';
 import { GLTFLoader } from '../../libs/three137/GLTFLoader.js';
 import { Explosion } from './Explosion.js';
@@ -9,9 +10,9 @@ class Obstacles{
 		this.game = game;
 		this.scene = game.scene;
         this.loadStar();
-		this.loadBomb();
 		this.tmpPos = new Vector3();
-        this.explosions = [];
+        this.obstacles = [];
+        this.obstacleSpawnOffset = 0;
     }
 
     loadStar(){
@@ -24,140 +25,106 @@ class Obstacles{
 			'star.glb',
 			// called when the resource is loaded
 			gltf => {
-
                 this.star = gltf.scene.children[0];
-
                 this.star.name = 'star';
-
-				if (this.bomb !== undefined) this.initialize();
-
+                this.initialize();
 			},
 			// called while loading is progressing
 			xhr => {
-
                 this.loadingBar.update('star', xhr.loaded, xhr.total );
-			
 			},
 			// called when loading has errors
 			err => {
-
 				console.error( err );
-
 			}
 		);
 	}	
 
-    loadBomb(){
-    	const loader = new GLTFLoader( ).setPath(`${this.assetsPath}plane/`);
-        
-		// Load a glTF resource
-		loader.load(
-			// resource URL
-			'bomb.glb',
-			// called when the resource is loaded
-			gltf => {
-
-                this.bomb = gltf.scene.children[0];
-
-                if (this.star !== undefined) this.initialize();
-
-			},
-			// called while loading is progressing
-			xhr => {
-
-				this.loadingBar.update('bomb', xhr.loaded, xhr.total );
-				
-			},
-			// called when loading has errors
-			err => {
-
-				console.error( err );
-
-			}
-		);
-	}
-
 	initialize(){
-        this.obstacles = [];
-        
-        const obstacle = new Group();
-        
-        obstacle.add(this.star);
-        
-        this.bomb.rotation.x = -Math.PI*0.5;
-        this.bomb.position.y = 7.5;
-        obstacle.add(this.bomb);
+        const geometry = new THREE.SphereGeometry( 0.1, 32, 16 );
+        const material = new THREE.MeshStandardMaterial( {
+            roughness: 0.1,
+            metalness: 1
+        } );
 
-        let rotate=true;
+        const obstacle1 = new Group();
+        this.obstacles1 = [];
+        for ( let i = 0; i < 500; i ++ ) {
 
-        for(let y=5; y>-8; y-=2.5){
-            rotate = !rotate;
-            if (y==0) continue;
-            const bomb = this.bomb.clone();
-            bomb.rotation.x = (rotate) ? -Math.PI*0.5 : 0;
-            bomb.position.y = y;
-            obstacle.add(bomb);
-        
+            const mesh = new THREE.Mesh( geometry, material );
+
+            mesh.position.x = Math.random() * 200 - 100;
+            mesh.position.y = Math.random() * 200 - 100;
+            mesh.position.z = Math.random() * 100 ;
+
+            mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 40;
+
+            obstacle1.add(mesh)
         }
-        this.obstacles.push(obstacle);
+        this.obstacles1.push(obstacle1);
+        this.scene.add( obstacle1 );
 
-        this.scene.add(obstacle);
+        const obstacle2 = new Group();
+        this.obstacles2 = [];
+        for ( let i = 0; i < 500; i ++ ) {
 
-        for(let i=0; i<3; i++){
-            
-            const obstacle1 = obstacle.clone();
-            
-            this.scene.add(obstacle1);
-            this.obstacles.push(obstacle1);
+            const mesh = new THREE.Mesh( geometry, material );
 
+            mesh.position.x = Math.random() * 200 - 100;
+            mesh.position.y = Math.random() * 200 - 100;
+            mesh.position.z = Math.random() * 100 + 100;
+
+            mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 40;
+
+            obstacle2.add(mesh)
         }
-
-        this.reset();
+        this.obstacles2.push(obstacle2);
+        this.scene.add( obstacle2 );
 
 		this.ready = true;
     }
 
-    removeExplosion( explosion ){
-        const index = this.explosions.indexOf( explosion );
-        if (index != -1) this.explosions.indexOf(index, 1);
-    }
-
-    reset(){
-        this.obstacleSpawn = { pos: 20, offset: 5 };
-        this.obstacles.forEach( obstacle => this.respawnObstacle(obstacle) );
-        let count;
-        while( this.explosions.length>0 && count<100){
-            this.explosions[0].onComplete();
-            count++;
-        }
-    }
-
     respawnObstacle( obstacle ){
-        this.obstacleSpawn.pos += 30;
-        const offset = (Math.random()*2 - 1) * this.obstacleSpawn.offset;
-        this.obstacleSpawn.offset += 0.2;
-        obstacle.position.set(0, offset, this.obstacleSpawn.pos );
-        obstacle.children[0].rotation.y = Math.random() * Math.PI * 2;
+    
+        this.obstacleSpawnOffset += (Math.random() * 100) + 200;
+
+        console.log(this.obstacleSpawnOffset)
+        obstacle.position.set(
+            Math.random() * 200 - 100, 
+            Math.random() * 200 - 100, 
+            this.obstacleSpawnOffset  );
 		obstacle.userData.hit = false;
 		obstacle.children.forEach( child => {
 			child.visible = true;
 		});
     }
+    
+    reset(){
+        ;
+    }
 
 	update(pos, time){
         let collisionObstacle;
 
-        this.obstacles.forEach( obstacle =>{
-            obstacle.children[0].rotateY(0.01);
+        this.obstacles1.forEach( obstacle =>{
             const relativePosZ = obstacle.position.z-pos.z;
             if (Math.abs(relativePosZ)<2 && !obstacle.userData.hit){
                 collisionObstacle = obstacle;
             }
-            if (relativePosZ<-20){
+            if (pos.z > this.obstacleSpawnOffset + 100){
                 this.respawnObstacle(obstacle); 
             }
         });
 
+        this.obstacles2.forEach( obstacle =>{
+            const relativePosZ = obstacle.position.z-pos.z;
+            if (Math.abs(relativePosZ)<2 && !obstacle.userData.hit){
+                collisionObstacle = obstacle;
+            }
+            if (pos.z > this.obstacleSpawnOffset + 100){
+                this.respawnObstacle(obstacle); 
+            }
+        });
        
         if (collisionObstacle!==undefined){
 			collisionObstacle.children.some( child => {
@@ -171,13 +138,9 @@ class Obstacles{
             })
             
         }
-
-        this.explosions.forEach( explosion => {
-            explosion.update( time );
-        });
     }
 
-	hit(obj){
+    hit(obj){
 		if (obj.name=='star'){
 			obj.visible = false;
 			this.game.incScore();
@@ -186,6 +149,7 @@ class Obstacles{
 			this.game.decLives();
         }
 	}
+
 }
 
 export { Obstacles };
